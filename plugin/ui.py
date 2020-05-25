@@ -5,6 +5,7 @@ from . import _
 import plugin
 import os
 import enigma
+from enigma import getDesktop
 from Components.config import config, configfile, getConfigListEntry, ConfigSelection
 from Screens.Screen import Screen
 from Components.ConfigList import ConfigListScreen
@@ -17,6 +18,10 @@ from Screens.MessageBox import MessageBox
 from Tools.FuzzyDate import FuzzyTime
 from Screens.Standby import getReasons
 from Tools.BoundFunction import boundFunction
+
+FHD = False
+if getDesktop(0).size().width() >= 1920:
+	FHD = True
 
 FRIENDLY = {
 	"/media/hdd": _("Harddisk"),
@@ -69,28 +74,44 @@ def saveSelectedFiles(files):
 		print "[AutoBackup] Failed to write /etc/backup.cfg", ex
 
 class Config(ConfigListScreen,Screen):
-	skin = """
-<screen position="center,center" size="560,400" title="AutoBackup Configuration" >
-	<ePixmap name="red"    position="0,0"   zPosition="2" size="140,40" pixmap="skin_default/buttons/red.png" transparent="1" alphatest="on" />
-	<ePixmap name="green"  position="140,0" zPosition="2" size="140,40" pixmap="skin_default/buttons/green.png" transparent="1" alphatest="on" />
-	<ePixmap name="yellow" position="280,0" zPosition="2" size="140,40" pixmap="skin_default/buttons/yellow.png" transparent="1" alphatest="on" />
-	<ePixmap name="blue"   position="420,0" zPosition="2" size="140,40" pixmap="skin_default/buttons/blue.png" transparent="1" alphatest="on" />
-
-	<widget name="key_red" position="0,0" size="140,40" valign="center" halign="center" zPosition="4"  foregroundColor="white" font="Regular;20" transparent="1" shadowColor="background" shadowOffset="-2,-2" />
-	<widget name="key_green" position="140,0" size="140,40" valign="center" halign="center" zPosition="4"  foregroundColor="white" font="Regular;20" transparent="1" shadowColor="background" shadowOffset="-2,-2" />
-	<widget name="key_yellow" position="280,0" size="140,40" valign="center" halign="center" zPosition="4"  foregroundColor="white" font="Regular;20" transparent="1" shadowColor="background" shadowOffset="-2,-2" />
-	<widget name="key_blue" position="420,0" size="140,40" valign="center" halign="center" zPosition="4"  foregroundColor="white" font="Regular;20" transparent="1" shadowColor="background" shadowOffset="-2,-2" />
-
-	<widget name="config" position="10,40" size="540,200" scrollbarMode="showOnDemand" />
-
-	<widget name="statusbar" position="10,250" size="470,20" font="Regular;18" />
-	<widget name="status" position="10,280" size="540,130" font="Console;14" />
-
-	<ePixmap alphatest="on" pixmap="skin_default/icons/clock.png" position="480,383" size="14,14" zPosition="3"/>
-	<widget font="Regular;18" halign="left" position="505,380" render="Label" size="55,20" source="global.CurrentTime" transparent="1" valign="center" zPosition="3">
-		<convert type="ClockToText">Default</convert>
-	</widget>
-</screen>"""
+	if FHD:
+		skin = """
+		<screen position="center,center" size="1000,800" title="AutoBackup Configuration" >
+			<ePixmap name="red"    position="50,0"   zPosition="2" size="140,40" pixmap="skin_default/buttons/red.png" transparent="1" alphatest="on" />
+			<ePixmap name="green"  position="300,0" zPosition="2" size="140,40" pixmap="skin_default/buttons/green.png" transparent="1" alphatest="on" />
+			<ePixmap name="yellow" position="550,0" zPosition="2" size="140,40" pixmap="skin_default/buttons/yellow.png" transparent="1" alphatest="on" />
+			<ePixmap name="blue"   position="800,0" zPosition="2" size="140,40" pixmap="skin_default/buttons/blue.png" transparent="1" alphatest="on" />
+			<widget name="key_red" position="50,0" size="140,40" valign="center" halign="center" zPosition="4"  foregroundColor="white" font="Regular;26" transparent="1" shadowColor="background" shadowOffset="-2,-2" />
+			<widget name="key_green" position="300,0" size="140,40" valign="center" halign="center" zPosition="4"  foregroundColor="white" font="Regular;26" transparent="1" shadowColor="background" shadowOffset="-2,-2" />
+			<widget name="key_yellow" position="550,0" size="140,40" valign="center" halign="center" zPosition="4"  foregroundColor="white" font="Regular;26" transparent="1" shadowColor="background" shadowOffset="-2,-2" />
+			<widget name="key_blue" position="800,0" size="140,40" valign="center" halign="center" zPosition="4"  foregroundColor="white" font="Regular;26" transparent="1" shadowColor="background" shadowOffset="-2,-2" />
+			<widget name="config" position="20,50" size="960,300" font="Regular;32" itemHeight="40" scrollbarMode="showOnDemand" />
+			<widget name="statusbar" position="40,350" size="920,40" font="Regular;32" />
+			<widget name="status" position="40,400" size="920,130" font="Console;32" />
+			<ePixmap alphatest="on" pixmap="skin_default/icons/clock.png" position="870,782" size="20,20" zPosition="3"/>
+			<widget font="Regular;28" halign="left" position="900,767" render="Label" size="220,40" source="global.CurrentTime" transparent="1" valign="center" zPosition="3">
+				<convert type="ClockToText">Default</convert>
+			</widget>
+		</screen>"""
+	else:
+		skin = """
+		<screen position="center,center" size="560,400" title="AutoBackup Configuration" >
+			<ePixmap name="red"    position="0,0"   zPosition="2" size="140,40" pixmap="skin_default/buttons/red.png" transparent="1" alphatest="on" />
+			<ePixmap name="green"  position="140,0" zPosition="2" size="140,40" pixmap="skin_default/buttons/green.png" transparent="1" alphatest="on" />
+			<ePixmap name="yellow" position="280,0" zPosition="2" size="140,40" pixmap="skin_default/buttons/yellow.png" transparent="1" alphatest="on" />
+			<ePixmap name="blue"   position="420,0" zPosition="2" size="140,40" pixmap="skin_default/buttons/blue.png" transparent="1" alphatest="on" />
+			<widget name="key_red" position="0,0" size="140,40" valign="center" halign="center" zPosition="4"  foregroundColor="white" font="Regular;20" transparent="1" shadowColor="background" shadowOffset="-2,-2" />
+			<widget name="key_green" position="140,0" size="140,40" valign="center" halign="center" zPosition="4"  foregroundColor="white" font="Regular;20" transparent="1" shadowColor="background" shadowOffset="-2,-2" />
+			<widget name="key_yellow" position="280,0" size="140,40" valign="center" halign="center" zPosition="4"  foregroundColor="white" font="Regular;20" transparent="1" shadowColor="background" shadowOffset="-2,-2" />
+			<widget name="key_blue" position="420,0" size="140,40" valign="center" halign="center" zPosition="4"  foregroundColor="white" font="Regular;20" transparent="1" shadowColor="background" shadowOffset="-2,-2" />
+			<widget name="config" position="10,40" size="540,200" scrollbarMode="showOnDemand" />
+			<widget name="statusbar" position="10,250" size="470,20" font="Regular;18" />
+			<widget name="status" position="10,280" size="540,130" font="Console;14" />
+			<ePixmap alphatest="on" pixmap="skin_default/icons/clock.png" position="480,383" size="14,14" zPosition="3"/>
+			<widget font="Regular;18" halign="left" position="505,380" render="Label" size="55,20" source="global.CurrentTime" transparent="1" valign="center" zPosition="3">
+				<convert type="ClockToText">Default</convert>
+			</widget>
+		</screen>"""
 
 	def __init__(self, session, args = 0):
 		self.session = session
@@ -122,7 +143,7 @@ class Config(ConfigListScreen,Screen):
 		self["key_red"] = Button(_("Cancel"))
 		self["key_green"] = Button(_("OK"))
 		self["key_yellow"] = Button(_("Manual"))
-		self["key_blue"] = Button(_("Options/Restore"))
+		self["key_blue"] = Button(_("Options"))
 		self["statusbar"] = Label()
 		self["status"] = ScrollLabel('', showscrollbar=False)
 		self["setupActions"] = ActionMap(["SetupActions", "ColorActions", "MenuActions"],
